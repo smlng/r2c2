@@ -72,12 +72,11 @@
  * @{
  */
 #define CONF_CTL_INTERVAL       (20 * 1000)     /* 20ms */
-#define CONF_CTL_BUTTON_TYPE    (1U)
-#define CONF_CTL_AXIS_TYPE      (2U)
+#define CONF_CTL_BUTTON         (1U)
+#define CONF_CTL_AXIS           (2U)
 
-#define CONF_CTL_AXIS_STEERING  (3)
-#define CONF_CTL_AXIS_FW        (2)
-#define CONF_CTL_AXIS_BW        (5)
+#define CONF_CTL_AXIS_STEERING  (2)
+#define CONF_CTL_AXIS_ENGINE    (1)
 /** @} */
 
 #ifdef __cplusplus

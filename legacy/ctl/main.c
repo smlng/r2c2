@@ -55,7 +55,9 @@ static int ctl_init(const char *dev)
     }
 
     read(fd, buf, 8);
-    while (buf[6] & 0x80) {
+    while (buf[5] != 0x80) {
+        printf("0:%#x 1:%#x 2:%#x 3:%#x 4:%#x 5:%#x 6:%#x 7:%#x\n",
+                buf[0],buf[1],buf[2],buf[3],buf[4],buf[5],buf[6],buf[7]);
         if (buf[6] == 0x81) {
             ++buttons;
         }
@@ -63,7 +65,7 @@ static int ctl_init(const char *dev)
             ++axes;
         }
         read(fd, buf, 8);
-    };
+    }
 
     printf("Found Joystick: %i buttons, %i axes\n", buttons, axes);
     return fd;
@@ -110,45 +112,38 @@ static void *ctl_read(void *arg)
     int newdata = 0;
 
     int16_t steering = 0;
-    int16_t fw = -32767;
-    int16_t bw = -32767;
+    int16_t engine = 0;
 
     printf("\n     steering  speed_fw  speed_bw\n");
 
     while (run) {
         n = read(js, buf, 8);
         if (n == 8) {
-
-            if (buf[6] == CONF_CTL_AXIS_TYPE) {
+            if (buf[6] == CONF_CTL_BUTTON) {
+                printf ("INFO ctl_read: pressed button (%#x)\n", buf[7]);
+            }
+            else if (buf[6] == CONF_CTL_AXIS) {
                 if (buf[7] == CONF_CTL_AXIS_STEERING) {
                     steering = ((int16_t)buf[5] << 8) | buf[4];
                     newdata = 1;
                 }
-                else if (buf[7] == CONF_CTL_AXIS_FW) {
-                    fw = ((int16_t)buf[5] << 8) | buf[4];
+                else if (buf[7] == CONF_CTL_AXIS_ENGINE) {
+                    engine = ((int16_t)buf[5] << 8) | buf[4];
                     newdata = 1;
                 }
-                else if (buf[7] == CONF_CTL_AXIS_BW) {
-                    bw = ((int16_t)buf[5] << 8) | buf[4];
-                    newdata = 1;
-                }
+            }
+            else {
+                puts("WARN ctl_read: unknown control type!\n");
             }
 
             if (newdata) {
                 newdata = 0;
-                int a = fw + 32767;
-                int b = bw + 32767;
 
                 /* scale values to actual control values */
-                if (a == 0) {
-                    speed = -(b / 64);
-                }
-                else {
-                    speed = a / 64;
-                }
-                dir = (steering / 32);
+                speed = (engine / 32)*(-1);
+                dir =   (steering / 32);
 
-                printf("raw:  %7i   %7u   %7u\n", steering, a, b);
+                printf("raw:  %7i   %7i\n", steering, engine);
                 puts("");
                 printf("        speed  steering  switches\n");
                 printf("ctrl  %7i   %7i      0x%02x\n", speed, dir, switches);
