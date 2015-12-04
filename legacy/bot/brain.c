@@ -53,6 +53,7 @@ static void _dispatch(uint8_t *data, size_t len)
         memcpy(&dir, &(data[3]), 2);
         brain_set_speed(speed);
         brain_steer(dir);
+        printf("speed %d, dir %d\n", speed, dir);
         wd_report();
     } else {
         printf("unknown data, %d bytes.\n", len);

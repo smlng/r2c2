@@ -71,12 +71,37 @@
  * @brief   controller configuration
  * @{
  */
-#define CONF_CTL_INTERVAL       (20 * 1000)     /* 20ms */
-#define CONF_CTL_BUTTON         (1U)
-#define CONF_CTL_AXIS           (2U)
+#define CONF_CTL_INTERVAL           (20 * 1000)     /* 20ms */
 
-#define CONF_CTL_AXIS_STEERING  (2)
-#define CONF_CTL_AXIS_ENGINE    (1)
+#define CONF_CTL_AXIS               (2U)
+
+#define CONF_CTL_AXIS_LSTICK_H      (0)
+#define CONF_CTL_AXIS_LSTICK_V      (1)
+#define CONF_CTL_AXIS_RSTICK_H      (2)
+#define CONF_CTL_AXIS_RSTICK_V      (3)
+#define CONF_CTL_AXIS_CROSS_H       (4)
+#define CONF_CTL_AXIS_CROSS_V       (5)
+
+#define CONF_CTL_AXIS_ENGINE        (1)
+#define CONF_CTL_AXIS_STEERING      (2)
+
+#define CONF_CTL_BUTTON             (1U)
+
+#define CONF_CTL_BUTTON_TRIANGLE    (0)
+#define CONF_CTL_BUTTON_CIRCLE      (1)
+#define CONF_CTL_BUTTON_CROSS       (2)
+#define CONF_CTL_BUTTON_SQUARE      (3)
+
+#define CONF_CTL_BUTTON_L1          (4)
+#define CONF_CTL_BUTTON_L2          (6)
+#define CONF_CTL_BUTTON_R1          (5)
+#define CONF_CTL_BUTTON_R2          (7)
+
+#define CONF_CTL_BUTTON_SELECT      (8)
+#define CONF_CTL_BUTTON_START       (9)
+#define CONF_CTL_BUTTON_ENGINE      (10)
+#define CONF_CTL_BUTTON_STEERING    (11)
+
 /** @} */
 
 #ifdef __cplusplus
