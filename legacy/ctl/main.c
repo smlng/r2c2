@@ -121,6 +121,7 @@ static void *ctl_read(void *arg)
         if (n == 8) {
             if (buf[6] == CONF_CTL_BUTTON) {
                 printf ("INFO ctl_read: pressed button (%#x)\n", buf[7]);
+                switches = buf[4] * buf[7];
             }
             else if (buf[6] == CONF_CTL_AXIS) {
                 if (buf[7] == CONF_CTL_AXIS_STEERING) {
@@ -140,7 +141,7 @@ static void *ctl_read(void *arg)
                 newdata = 0;
 
                 /* scale values to actual control values */
-                speed = (engine / 32)*(-1);
+                speed = (engine / 32);
                 dir =   (steering / 32);
 
                 printf("raw:  %7i   %7i\n", steering, engine);

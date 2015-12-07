@@ -39,7 +39,7 @@ static void _shutdown(void)
 static void _be_happy(void)
 {
     /* HACK */
-    pwm_set(CONF_ENGINE_PWM, CONF_ENGINE_PWM_CHAN, 10000);
+    //pwm_set(CONF_ENGINE_PWM, CONF_ENGINE_PWM_CHAN, 10000);
 }
 
 static void *_thread(void *arg)

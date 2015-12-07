@@ -24,6 +24,7 @@
 #include <sys/socket.h>
 #include <unistd.h>
 // riot
+#include "board.h"
 #include "kernel.h"
 #include "net/gnrc/netapi.h"
 #include "net/gnrc/netif.h"
@@ -53,6 +54,7 @@ static void _dispatch(uint8_t *data, size_t len)
         memcpy(&dir, &(data[3]), 2);
         brain_set_speed(speed);
         brain_steer(dir);
+        brain_switches(data[5]);
         printf("speed %d, dir %d\n", speed, dir);
         wd_report();
     } else {
@@ -192,4 +194,12 @@ void brain_steer(int16_t dir)
         dir *= -1;
     }
     pwm_set(CONF_STEERING_PWM, CONF_STEERING_PWM_CHAN, dir);
+}
+
+void brain_switches(uint8_t state)
+{
+    if (state)
+        LED_ON;
+    else
+        LED_OFF;
 }
