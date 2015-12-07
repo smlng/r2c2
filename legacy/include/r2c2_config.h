@@ -23,18 +23,6 @@
 
 #ifdef RIOT_VERSION
 /**
- * @brief   Configure the steering ENGINE
- * @{
- */
-#define CONF_STEERING_PWM          (PWM_1)
-#define CONF_STEERING_PWM_CHAN     (0U)
-#define CONF_STEERING_FREQ         (1000U)
-#define CONF_STEERING_RES          (0x03ff)    /* results in ~10MHz timer freq */
-#define CONF_STEERING_DIRA         GPIO_PIN(PA,22)
-#define CONF_STEERING_DIRB         GPIO_PIN(PA,23)
-/** @} */
-
-/**
  * @brief   Configure the main engine
  * @{
  */
@@ -45,6 +33,19 @@
 #define CONF_ENGINE_DIRA         GPIO_PIN(PA,13)
 #define CONF_ENGINE_DIRB         GPIO_PIN(PA,28)
 /** @} */
+
+/**
+ * @brief   Configure the steering ENGINE
+ * @{
+ */
+#define CONF_STEERING_PWM          (PWM_0)
+#define CONF_STEERING_PWM_CHAN     (1U)
+#define CONF_STEERING_FREQ         (1000U)
+#define CONF_STEERING_RES          (0x03ff)    /* results in ~10MHz timer freq */
+#define CONF_STEERING_DIRA         GPIO_PIN(PA,22)
+#define CONF_STEERING_DIRB         GPIO_PIN(PA,23)
+/** @} */
+
 /**
  * @brief   Watchdog configuration
  * @{

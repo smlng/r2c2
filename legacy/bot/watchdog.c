@@ -29,17 +29,11 @@ static char wd_stack[THREAD_STACKSIZE_DEFAULT];
 static int active = 1;
 static volatile int pkt_count = 0;
 
-static void _shutdown(void)
+static void _terminate(void)
 {
     brain_set_speed(0);
     /* HACK */
     pwm_set(CONF_ENGINE_PWM, CONF_ENGINE_PWM_CHAN, 0);
-}
-
-static void _be_happy(void)
-{
-    /* HACK */
-    //pwm_set(CONF_ENGINE_PWM, CONF_ENGINE_PWM_CHAN, 10000);
 }
 
 static void *_thread(void *arg)
@@ -49,10 +43,7 @@ static void *_thread(void *arg)
     while (1) {
         xtimer_usleep(CONF_WD_INTERVAL);
         if (active && pkt_count < CONF_WD_THRESSHOLD) {
-            _shutdown();
-        }
-        else {
-            _be_happy();
+            _terminate();
         }
         pkt_count = 0;
     }

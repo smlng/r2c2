@@ -48,13 +48,16 @@ static msg_t _brain_msg_queue[BRAIN_QUEUE_SIZE];
 static void _dispatch(uint8_t *data, size_t len)
 {
     int16_t speed, dir;
+    uint8_t switches;
 
     if (data[0] == CONF_COMM_MSGCTL && len == CONF_COMM_MSGLEN) {
         memcpy(&speed, &(data[1]), 2);
         memcpy(&dir, &(data[3]), 2);
+        switches = data[5];
         brain_set_speed(speed);
         brain_steer(dir);
-        brain_switches(data[5]);
+        if (switches)
+            brain_switches(switches);
         printf("speed %d, dir %d\n", speed, dir);
         wd_report();
     } else {
@@ -196,10 +199,8 @@ void brain_steer(int16_t dir)
     pwm_set(CONF_STEERING_PWM, CONF_STEERING_PWM_CHAN, dir);
 }
 
-void brain_switches(uint8_t state)
+void brain_switches(uint8_t button)
 {
-    if (state)
-        LED_ON;
-    else
-        LED_OFF;
+    if (button == CONF_CTL_BUTTON_CROSS)
+        LED_TOGGLE;
 }

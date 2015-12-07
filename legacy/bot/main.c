@@ -31,7 +31,7 @@ static int _speed(int argc, char **argv)
     int16_t speed;
 
     if (argc < 2) {
-        printf("usage: %s SPEED [-1024 to 1023]\n", argv[0]);
+        printf("usage: %s SPEED [-1023 to 1023]\n", argv[0]);
         return 1;
     }
 
@@ -49,7 +49,7 @@ static int _steer(int argc, char **argv)
     int16_t dir;
 
     if (argc < 2) {
-        printf("usage: %s DIR [-1024 to 1023]\n", argv[0]);
+        printf("usage: %s DIR [-1023 to 1023]\n", argv[0]);
         return 1;
     }
 
@@ -60,6 +60,18 @@ static int _steer(int argc, char **argv)
         return 1;
     }
     brain_steer(dir);
+    return 0;
+}
+
+static int _switch(int argc, char **argv)
+{
+    uint8_t button;
+    if (argc < 2) {
+        printf("usage: %s <button>\n", argv[0]);
+        return 1;
+    }
+    button = (uint8_t)atoi(argv[1]);
+    brain_switches(button);
     return 0;
 }
 
@@ -85,8 +97,9 @@ static int _debug(int argc, char **argv)
  * @brief   Define some shell commands for testing the brain
  */
 static const shell_command_t _commands[] = {
-    { "speed", "set Peta's speed", _speed },
+    { "speed", "set speed", _speed },
     { "steer", "set direction", _steer },
+    { "switch", "trigger switches", _switch },
     { "debug", "enable debug mode", _debug },
     { NULL, NULL, NULL }
 };
