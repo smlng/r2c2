@@ -13,6 +13,19 @@ static int state_flash = 0;
 
 static char tlights_stack[THREAD_STACKSIZE_DEFAULT];
 
+static void _toggle_light(int *state, int light)
+{
+    if (*state) {
+        if (*state < 2) {
+            gpio_set(light);
+            *state = 2;
+        }
+    }
+    else {
+        gpio_clear(light);
+    }
+}
+
 static void *_thread_lights(void *arg)
 {
     (void)arg;
@@ -27,8 +40,8 @@ static void *_thread_lights(void *arg)
             --state_flash;
         }
         else {
-            state_hli ? gpio_set(CONF_LIGHTS_HLI) : gpio_clear(CONF_LIGHTS_HLI);
-            state_hlo ? gpio_set(CONF_LIGHTS_HLO) : gpio_clear(CONF_LIGHTS_HLO);
+            _toggle_light(&state_hli,CONF_LIGHTS_HLI);
+            _toggle_light(&state_hlo,CONF_LIGHTS_HLO);
         }
     }
     return NULL;
@@ -47,22 +60,19 @@ void lights_reset (void)
     gpio_clear(CONF_LIGHTS_HLO);
 }
 
-void flash_headlights (void)
+void flash_headlights (int state)
 {
-    if (!state_hli && !state_hlo) {
+    if (state) {
         state_flash = CONF_LIGHTS_FLASH;
     }
-    else {
-        puts ("cannot flash headlights, already ON!");
-    }
 }
 
-void toggle_headlights_inner (void)
+void toggle_headlights_inner (int state)
 {
-    state_hli ? (state_hli = 0) : (state_hli = 1);
+    state_hli = state;
 }
 
-void toggle_headlights_outer (void)
+void toggle_headlights_outer (int state)
 {
-    state_hlo ? (state_hlo = 0) : (state_hlo = 1);
+    state_hlo = state;
 }

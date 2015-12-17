@@ -58,7 +58,7 @@ static void _dispatch(uint8_t *data, size_t len)
         brain_set_speed(speed);
         brain_steer(dir);
         brain_buttons(buttons);
-        printf("speed %d, dir %d\n", speed, dir);
+        printf("speed %d, dir %d, buttons %d\n", speed, dir, buttons);
         wd_report();
     } else {
         printf("unknown data, %d bytes.\n", len);
@@ -202,13 +202,7 @@ void brain_steer(int16_t dir)
 
 void brain_buttons(uint16_t buttons)
 {
-    if (_chk_bit(&buttons, CONF_CTL_BUTTON_SQUARE)) {
-        toggle_headlights_outer();
-    }
-    if(_chk_bit(&buttons, CONF_CTL_BUTTON_CIRCLE)) {
-        toggle_headlights_inner();
-    }
-    if(_chk_bit(&buttons, CONF_CTL_BUTTON_R2)) {
-        flash_headlights();
-    }
+    toggle_headlights_outer(_chk_bit(&buttons, CONF_CTL_BUTTON_SQUARE));
+    toggle_headlights_inner(_chk_bit(&buttons, CONF_CTL_BUTTON_CIRCLE));
+    flash_headlights(_chk_bit(&buttons, CONF_CTL_BUTTON_R2));
 }
