@@ -21,6 +21,24 @@
  extern "C" {
 #endif
 
+/* bit manipulation helper */
+static inline void _clr_bit(uint16_t *x, const int b)
+{
+    *x &= ~(1U << b);
+}
+static inline void _set_bit(uint16_t *x, const int b)
+{
+    *x |= (1U << b);
+}
+static inline void _tgl_bit(uint16_t *x, const int b)
+{
+    *x ^= (1U << b);
+}
+static inline int _chk_bit(uint16_t *x, const int b)
+{
+    return ((*x >> b) & 1);
+}
+
 #ifdef RIOT_VERSION
 /**
  * @brief   Configure the main engine
@@ -47,6 +65,18 @@
 /** @} */
 
 /**
+ * @brief   Configure lights
+ * @{
+ */
+
+#define CONF_LIGHTS_PRIO        (THREAD_PRIORITY_MAIN - 2)
+#define CONF_LIGHTS_INTERVAL    (10*1000)
+#define CONF_LIGHTS_HLI         GPIO_PIN(PB,03)
+#define CONF_LIGHTS_HLO         GPIO_PIN(PB,22)
+#define CONF_LIGHTS_FLASH       (20)
+/** @} */
+
+/**
  * @brief   Watchdog configuration
  * @{
  */
@@ -65,14 +95,14 @@
 #define CONF_COMM_CHAN          (16U)
 #define CONF_COMM_PORT          "2409"
 #define CONF_COMM_MSGCTL        (0xee)
-#define CONF_COMM_MSGLEN        (6U)
+#define CONF_COMM_MSGLEN        (7U)
 /** @} */
 
 /**
  * @brief   controller configuration
  * @{
  */
-#define CONF_CTL_INTERVAL           (20 * 1000)     /* 20ms */
+#define CONF_CTL_INTERVAL           (25 * 1000)     /* 25ms */
 
 #define CONF_CTL_AXIS               (2U)
 

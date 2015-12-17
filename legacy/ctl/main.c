@@ -31,15 +31,14 @@
 // own
 #include "r2c2_config.h"
 
-
 static int js;
 
-static volatile int dir = 0;
-static volatile int speed = 0;
-static volatile uint8_t switches = 0;
+static volatile int16_t dir = 0;
+static volatile int16_t speed = 0;
+static volatile uint16_t buttons = 0;
 
-static int buttons = 0;
-static int axes = 0;
+static int num_btns = 0;
+static int num_axes = 0;
 
 static int sendfd = -1;
 static int run = 1;
@@ -59,15 +58,15 @@ static int ctl_init(const char *dev)
         printf("0:%#x 1:%#x 2:%#x 3:%#x 4:%#x 5:%#x 6:%#x 7:%#x\n",
                 buf[0],buf[1],buf[2],buf[3],buf[4],buf[5],buf[6],buf[7]);
         if (buf[6] == 0x81) {
-            ++buttons;
+            ++num_btns;
         }
         if (buf[6] == 0x82) {
-            ++axes;
+            ++num_axes;
         }
         read(fd, buf, 8);
     }
 
-    printf("Found Joystick: %i buttons, %i axes\n", buttons, axes);
+    printf("Found Joystick: %i buttons, %i axes\n", num_btns, num_axes);
     return fd;
 }
 
@@ -99,6 +98,9 @@ static int r2c2_send(char *addr_str, char *port_str, char *data, size_t datalen)
     if ((ret=sendto(sendfd,data,datalen,0,res->ai_addr,res->ai_addrlen)) < 0) {
         printf("ERROR r2c2_send: sending data: %d\n", ret);
     }
+    else {
+        printf("SUCCESS r2c2_send: sending data: %d\n", ret);
+    }
     freeaddrinfo(res);
 
     return ret;
@@ -120,8 +122,22 @@ static void *ctl_read(void *arg)
         n = read(js, buf, 8);
         if (n == 8) {
             if (buf[6] == CONF_CTL_BUTTON) {
-                printf ("INFO ctl_read: pressed button (%#x)\n", buf[7]);
-                switches = buf[4] * buf[7];
+                if (buf[4]) {
+                    printf ("INFO ctl_read: pressed button (%#x)\n", buf[7]);
+                    if ((buf[7] == CONF_CTL_BUTTON_L2) | (buf[7] == CONF_CTL_BUTTON_R2)) {
+                        _set_bit(&buttons, buf[7]);
+                    }
+                    else {
+                        _tgl_bit(&buttons, buf[7]);
+                    }
+                    newdata = 1;
+                }
+                else {
+                    printf ("INFO ctl_read: released button (%#x)\n", buf[7]);
+                    if ((buf[7] == CONF_CTL_BUTTON_L2) | (buf[7] == CONF_CTL_BUTTON_R2)) {
+                        _clr_bit(&buttons, buf[7]);
+                    }
+                }
             }
             else if (buf[6] == CONF_CTL_AXIS) {
                 if (buf[7] == CONF_CTL_AXIS_STEERING) {
@@ -146,8 +162,8 @@ static void *ctl_read(void *arg)
 
                 printf("raw:  %7i   %7i\n", steering, engine);
                 puts("");
-                printf("        speed  steering  switches\n");
-                printf("ctrl  %7i   %7i      0x%02x\n", speed, dir, switches);
+                printf("        speed  steering  buttons\n");
+                printf("ctrl  %7i   %7i      %7i\n", speed, dir, buttons);
                 printf("\033[F\033[F\033[F\033[F");
             }
         }
@@ -188,7 +204,7 @@ int main(int argc, char **argv)
         ctl_data[0] = CONF_COMM_MSGCTL;
         memcpy(&(ctl_data[1]), &speed, 2);
         memcpy(&(ctl_data[3]), &dir, 2);
-        ctl_data[5] = switches;
+        memcpy(&(ctl_data[5]), &buttons, 2);
         if (r2c2_send(argv[2], CONF_COMM_PORT, ctl_data, CONF_COMM_MSGLEN) < 0) {
             run = 0;
             break;

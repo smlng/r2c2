@@ -34,6 +34,7 @@
 #include "thread.h"
 // own
 #include "brain.h"
+#include "lights.h"
 #include "watchdog.h"
 #include "r2c2_config.h"
 
@@ -48,16 +49,15 @@ static msg_t _brain_msg_queue[BRAIN_QUEUE_SIZE];
 static void _dispatch(uint8_t *data, size_t len)
 {
     int16_t speed, dir;
-    uint8_t switches;
+    uint16_t buttons;
 
     if (data[0] == CONF_COMM_MSGCTL && len == CONF_COMM_MSGLEN) {
         memcpy(&speed, &(data[1]), 2);
         memcpy(&dir, &(data[3]), 2);
-        switches = data[5];
+        memcpy(&buttons, &(data[5]), 2);
         brain_set_speed(speed);
         brain_steer(dir);
-        if (switches)
-            brain_switches(switches);
+        brain_buttons(buttons);
         printf("speed %d, dir %d\n", speed, dir);
         wd_report();
     } else {
@@ -160,7 +160,8 @@ void brain_init(void)
         return;
     }
     pwm_set(CONF_ENGINE_PWM, CONF_ENGINE_PWM_CHAN, 0);
-
+    puts("+ init lights");
+    lights_init();
     /* initialize the software watchdog */
     puts("+ init watchdog");
     wd_init();
@@ -169,7 +170,7 @@ void brain_init(void)
     comm_init();
     /* run brain thread */
     puts("+ run the brain");
-    thread_create(stack, STACKSIZE, STACKPRIO, CREATE_STACKTEST, _brain_thread,
+    thread_create(stack, STACKSIZE, STACKPRIO, THREAD_CREATE_STACKTEST, _brain_thread,
                   NULL, "brain");
 }
 
@@ -199,8 +200,15 @@ void brain_steer(int16_t dir)
     pwm_set(CONF_STEERING_PWM, CONF_STEERING_PWM_CHAN, dir);
 }
 
-void brain_switches(uint8_t button)
+void brain_buttons(uint16_t buttons)
 {
-    if (button == CONF_CTL_BUTTON_CROSS)
-        LED_TOGGLE;
+    if (_chk_bit(&buttons, CONF_CTL_BUTTON_SQUARE)) {
+        toggle_headlights_outer();
+    }
+    if(_chk_bit(&buttons, CONF_CTL_BUTTON_CIRCLE)) {
+        toggle_headlights_inner();
+    }
+    if(_chk_bit(&buttons, CONF_CTL_BUTTON_R2)) {
+        flash_headlights();
+    }
 }

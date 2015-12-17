@@ -27,7 +27,7 @@ void brain_set_speed(int16_t speed);
 
 void brain_steer(int16_t dir);
 
-void brain_switches(uint8_t state);
+void brain_buttons(uint16_t state);
 
 #ifdef __cplusplus
 }

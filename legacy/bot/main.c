@@ -65,13 +65,13 @@ static int _steer(int argc, char **argv)
 
 static int _switch(int argc, char **argv)
 {
-    uint8_t button;
+    uint16_t button;
     if (argc < 2) {
         printf("usage: %s <button>\n", argv[0]);
         return 1;
     }
-    button = (uint8_t)atoi(argv[1]);
-    brain_switches(button);
+    button = (uint16_t)atoi(argv[1]);
+    brain_buttons(button);
     return 0;
 }
 

@@ -36,7 +36,7 @@ static void _terminate(void)
     pwm_set(CONF_ENGINE_PWM, CONF_ENGINE_PWM_CHAN, 0);
 }
 
-static void *_thread(void *arg)
+static void *_thread_watchdog(void *arg)
 {
     (void)arg;
 
@@ -55,8 +55,8 @@ static void *_thread(void *arg)
 void wd_init(void)
 {
     /* start the thread */
-    thread_create(wd_stack, sizeof(wd_stack), CONF_WD_PRIO, CREATE_STACKTEST,
-                  _thread, NULL, "wd");
+    thread_create(wd_stack, sizeof(wd_stack), CONF_WD_PRIO,
+                    THREAD_CREATE_STACKTEST, _thread_watchdog, NULL, "wd");
 }
 
 void wd_report(void)
