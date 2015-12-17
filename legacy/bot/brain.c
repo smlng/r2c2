@@ -46,6 +46,14 @@ static char stack[STACKSIZE];
 #define BRAIN_QUEUE_SIZE     (8)
 static msg_t _brain_msg_queue[BRAIN_QUEUE_SIZE];
 
+static void _horn(int state)
+{
+    if (state)
+        pwm_set(CONF_HORN_PWM, CONF_HORN_PWM_CHAN, 750);
+    else
+        pwm_set(CONF_HORN_PWM, CONF_HORN_PWM_CHAN, 0);
+}
+
 static void _dispatch(uint8_t *data, size_t len)
 {
     int16_t speed, dir;
@@ -160,6 +168,12 @@ void brain_init(void)
         return;
     }
     pwm_set(CONF_ENGINE_PWM, CONF_ENGINE_PWM_CHAN, 0);
+    puts("+ init horn");
+    if (pwm_init(CONF_HORN_PWM, CONF_HORN_PWM_CHAN,
+                 CONF_HORN_FREQ, CONF_HORN_RES) < 0) {
+        puts("ERROR brain_init: init horn PWM\n");
+        return;
+    }
     puts("+ init lights");
     lights_init();
     /* initialize the software watchdog */
@@ -205,4 +219,5 @@ void brain_buttons(uint16_t buttons)
     toggle_headlights_outer(_chk_bit(&buttons, CONF_CTL_BUTTON_SQUARE));
     toggle_headlights_inner(_chk_bit(&buttons, CONF_CTL_BUTTON_CIRCLE));
     flash_headlights(_chk_bit(&buttons, CONF_CTL_BUTTON_R2));
+    _horn(_chk_bit(&buttons, CONF_CTL_BUTTON_L2));
 }

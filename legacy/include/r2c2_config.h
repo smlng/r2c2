@@ -65,6 +65,16 @@ static inline int _chk_bit(uint16_t *x, const int b)
 /** @} */
 
 /**
+ * @brief   Configure the steering ENGINE
+ * @{
+ */
+#define CONF_HORN_PWM          (PWM_1)
+#define CONF_HORN_PWM_CHAN     (0U)
+#define CONF_HORN_FREQ         (1000U)
+#define CONF_HORN_RES          (0x03ff)    /* results in ~10MHz timer freq */
+/** @} */
+
+/**
  * @brief   Configure lights
  * @{
  */
