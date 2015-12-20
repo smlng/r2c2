@@ -39,6 +39,13 @@ static inline int _chk_bit(uint16_t *x, const int b)
     return ((*x >> b) & 1);
 }
 
+typedef struct {
+    uint8_t     type;
+    int16_t     speed;
+    int16_t     steer;
+    uint16_t    buttons;
+} r2c2_msg_t;
+
 #ifdef RIOT_VERSION
 /**
  * @brief   Configure the main engine
@@ -80,10 +87,10 @@ static inline int _chk_bit(uint16_t *x, const int b)
  */
 
 #define CONF_LIGHTS_PRIO        (THREAD_PRIORITY_MAIN - 2)
-#define CONF_LIGHTS_INTERVAL    (10*1000)
+#define CONF_LIGHTS_INTERVAL    (10*1000) // 10ms
 #define CONF_LIGHTS_HLI         GPIO_PIN(PB,03)
 #define CONF_LIGHTS_HLO         GPIO_PIN(PB,22)
-#define CONF_LIGHTS_FLASH       (20)
+#define CONF_LIGHTS_FLASH       (20) // x-times CONF_LIGHTS_INTERVAL
 /** @} */
 
 /**
@@ -101,8 +108,8 @@ static inline int _chk_bit(uint16_t *x, const int b)
  * @brief   Configure communication
  * @{
  */
-#define CONF_COMM_PAN           (0x23)
-#define CONF_COMM_CHAN          (16U)
+#define CONF_COMM_PAN           (0x23) // lowpan ID
+#define CONF_COMM_CHAN          (16U)  // channel
 #define CONF_COMM_PORT          "2409"
 #define CONF_COMM_MSGCTL        (0xee)
 #define CONF_COMM_MSGLEN        (7U)
