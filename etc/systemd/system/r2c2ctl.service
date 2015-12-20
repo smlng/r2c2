@@ -1,0 +1,14 @@
+[Unit]
+Description=R2C2 controller
+After=network.target lowpan.service
+
+[Service]
+EnvironmentFile=-/etc/default/r2c2
+Type=simple
+User=pi
+ExecStart=/usr/local/sbin/r2c2ctl $DEV $IP
+Restart=on-abort
+
+[Install]
+WantedBy=multi-user.target
+Alias=r2c2ctl.service

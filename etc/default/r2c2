@@ -1,0 +1,2 @@
+DEV="/dev/input/js0"
+IP="fe80::585a:506b:517e:d2%lowpan0"
