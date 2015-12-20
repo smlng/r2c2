@@ -3,11 +3,10 @@ Description=Create lowpan device
 After=network.target
 
 [Service]
-EnvironmentFile=-/etc/default/lowpan
+EnvironmentFile=/etc/default/lowpan
 Type=simple
 User=root
 ExecStart=/usr/sbin/create_lowpan.sh $PAN $CHN
 
 [Install]
 WantedBy=multi-user.target
-Alias=lowpan.service
