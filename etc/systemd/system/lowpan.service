@@ -6,7 +6,7 @@ After=network.target
 EnvironmentFile=/etc/default/lowpan
 Type=simple
 User=root
-ExecStart=/usr/sbin/create_lowpan.sh $PAN $CHN
+ExecStart=/usr/local/sbin/create_lowpan.sh $PAN $CHN
 
 [Install]
 WantedBy=multi-user.target
