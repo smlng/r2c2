@@ -75,20 +75,20 @@ static int r2c2_send(char *addr_str, char *port_str, char *data, size_t datalen)
     hints.ai_socktype = SOCK_DGRAM;
 
     if ((ret = getaddrinfo(addr_str, port_str, &hints, &res)) != 0) {
-        puts("ERROR r2c2_send: getaddrinfo");
+        fprintf(stderr,"ERROR r2c2_send: getaddrinfo");
         return (-1);
     }
 
     if(sendfd < 0) {
         // loop through all the results and make a socket
         if ((sendfd=socket(res->ai_family,res->ai_socktype,res->ai_protocol)) < 0) {
-            puts("ERROR r2c2_send: create socket");
+            fprintf(stderr,"ERROR r2c2_send: create socket");
             return (-1);
         }
     }
 
     if ((ret=sendto(sendfd,data,datalen,0,res->ai_addr,res->ai_addrlen)) < 0) {
-        printf("ERROR r2c2_send: sending data: %d\n", ret);
+        fprintf(stderr,"ERROR r2c2_send: sending data: %d\n", ret);
     }
 
     freeaddrinfo(res);
@@ -169,20 +169,20 @@ int main(int argc, char **argv)
     int res;
 
     if (argc < 3) {
-        printf("usage: %s <controller> <remoteIP>\n", argv[0]);
+        fprintf(stderr,"usage: %s <controller> <remoteIP>\n", argv[0]);
         return 1;
     }
 
     js = ctl_init(argv[1]);
     if (js < 0) {
-        puts("error: unable to open joystick");
+        fprintf(stderr,"error: unable to open joystick");
         return 1;
     }
 
     /* start the reader thread */
     res = pthread_create(&ctl_thread, NULL, ctl_read, NULL);
     if (res < 0) {
-        puts("error: unable to start reader thread");
+        fprintf(stderr,"error: unable to start reader thread");
         return 1;
     }
 

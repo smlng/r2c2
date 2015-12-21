@@ -1,10 +1,13 @@
 [Unit]
 Description=R2C2 controller
-After=network.target lowpan.service
+After=network.target
+After=lowpan.service
 
 [Service]
 EnvironmentFile=/etc/default/r2c2
 Type=simple
+StandardOutput=null
+StandardError=syslog
 User=pi
 ExecStart=/usr/local/sbin/r2c2ctl $DEV $IP
 Restart=on-abort
