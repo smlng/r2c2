@@ -112,7 +112,7 @@ typedef struct {
 #define CONF_COMM_CHAN          (16U)  // channel
 #define CONF_COMM_PORT          "2409"
 #define CONF_COMM_MSGCTL        (0xee)
-#define CONF_COMM_MSGLEN        (7U)
+#define CONF_COMM_MSGLEN        (sizeof(r2c2_msg_t))
 /** @} */
 
 /**

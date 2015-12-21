@@ -184,8 +184,8 @@ void brain_init(void)
     comm_init();
     /* run brain thread */
     puts("+ run the brain");
-    thread_create(stack, STACKSIZE, STACKPRIO, THREAD_CREATE_STACKTEST, _brain_thread,
-                  NULL, "brain");
+    thread_create(stack, STACKSIZE, STACKPRIO, THREAD_CREATE_STACKTEST,
+                    _brain_thread, NULL, "brain");
 }
 
 void brain_set_speed(int16_t speed)
