@@ -87,10 +87,10 @@ typedef struct {
  */
 
 #define CONF_LIGHTS_PRIO        (THREAD_PRIORITY_MAIN - 2)
-#define CONF_LIGHTS_INTERVAL    (10*1000) // 10ms
+#define CONF_LIGHTS_INTERVAL    (29*1000) // 29ms
 #define CONF_LIGHTS_HLI         GPIO_PIN(PB,03)
 #define CONF_LIGHTS_HLO         GPIO_PIN(PB,22)
-#define CONF_LIGHTS_FLASH       (20) // x-times CONF_LIGHTS_INTERVAL
+#define CONF_LIGHTS_FLASH       (10) // x-times CONF_LIGHTS_INTERVAL
 /** @} */
 
 /**
@@ -119,7 +119,7 @@ typedef struct {
  * @brief   controller configuration
  * @{
  */
-#define CONF_CTL_INTERVAL           (25 * 1000)     /* 25ms */
+#define CONF_CTL_INTERVAL           (41 * 1000)     /* 41ms */
 
 #define CONF_CTL_AXIS               (2U)
 
