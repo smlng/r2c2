@@ -15,11 +15,8 @@
 extern "C" {
 #endif
 
-void lights_init(void);
+kernel_pid_t lights_init(void);
 void lights_reset (void);
-void flash_headlights (int);
-void toggle_headlights_inner (int);
-void toggle_headlights_outer (int);
 
 #ifdef __cplusplus
 }

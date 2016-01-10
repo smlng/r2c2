@@ -45,6 +45,7 @@ static char stack[STACKSIZE];
 
 #define BRAIN_QUEUE_SIZE     (8)
 static msg_t _brain_msg_queue[BRAIN_QUEUE_SIZE];
+static kernel_pid_t lights_pid = -1;
 
 static void _horn(int state)
 {
@@ -174,8 +175,9 @@ void brain_init(void)
         puts("ERROR brain_init: init horn PWM\n");
         return;
     }
+    pwm_set(CONF_HORN_PWM, CONF_HORN_PWM_CHAN, 0);
     puts("+ init lights");
-    lights_init();
+    lights_pid = lights_init();
     /* initialize the software watchdog */
     puts("+ init watchdog");
     wd_init();
@@ -216,8 +218,8 @@ void brain_steer(int16_t dir)
 
 void brain_buttons(uint16_t buttons)
 {
-    toggle_headlights_outer(_chk_bit(&buttons, CONF_CTL_BUTTON_SQUARE));
-    toggle_headlights_inner(_chk_bit(&buttons, CONF_CTL_BUTTON_CIRCLE));
-    flash_headlights(_chk_bit(&buttons, CONF_CTL_BUTTON_R2));
+    msg_t m;
+    m.type = buttons;
+    msg_send(&m, lights_pid);
     _horn(_chk_bit(&buttons, CONF_CTL_BUTTON_L2));
 }

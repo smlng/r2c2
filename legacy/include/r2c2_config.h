@@ -75,10 +75,16 @@ typedef struct {
  * @brief   Configure the steering ENGINE
  * @{
  */
-#define CONF_HORN_PWM          (PWM_1)
-#define CONF_HORN_PWM_CHAN     (0U)
-#define CONF_HORN_FREQ         (1000U)
-#define CONF_HORN_RES          (0x03ff)    /* results in ~10MHz timer freq */
+#define CONF_HORN_PWM           (PWM_1)
+#define CONF_HORN_PWM_CHAN      (0U)
+#define CONF_HORN_FREQ          (1000U)
+#define CONF_HORN_RES           (0x03ff)    /* results in ~10MHz timer freq */
+
+#define CONF_LIGHTS_PWM         (PWM_1)
+#define CONF_LIGHTS_PWM_CHAN    (1U)
+#define CONF_LIGHTS_FREQ        (1000U)
+#define CONF_LIGHTS_RES         (0x03ff)    /* results in ~10MHz timer freq */
+#define CONF_LIGHTS_PWM_MAX     (1023)
 /** @} */
 
 /**
@@ -89,8 +95,10 @@ typedef struct {
 #define CONF_LIGHTS_PRIO        (THREAD_PRIORITY_MAIN - 2)
 #define CONF_LIGHTS_INTERVAL    (29*1000) // 29ms
 #define CONF_LIGHTS_HLI         GPIO_PIN(PB,03)
-#define CONF_LIGHTS_HLO         GPIO_PIN(PB,22)
+//#define CONF_LIGHTS_HLO         GPIO_PIN(PB,22)
 #define CONF_LIGHTS_FLASH       (10) // x-times CONF_LIGHTS_INTERVAL
+#define CONF_LIGHTS_ILEFT       GPIO_PIN(PB,22) // left indicator
+#define CONF_LIGHTS_IRIGHT      GPIO_PIN(PB,23) // right indicator
 /** @} */
 
 /**
