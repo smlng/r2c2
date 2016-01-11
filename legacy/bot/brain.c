@@ -50,7 +50,7 @@ static kernel_pid_t lights_pid = -1;
 static void _horn(int state)
 {
     if (state)
-        pwm_set(CONF_HORN_PWM, CONF_HORN_PWM_CHAN, 750);
+        pwm_set(CONF_HORN_PWM, CONF_HORN_PWM_CHAN, 255);
     else
         pwm_set(CONF_HORN_PWM, CONF_HORN_PWM_CHAN, 0);
 }
@@ -218,8 +218,6 @@ void brain_steer(int16_t dir)
 
 void brain_buttons(uint16_t buttons)
 {
-    msg_t m;
-    m.type = buttons;
-    msg_send(&m, lights_pid);
+    check_lights(buttons);
     _horn(_chk_bit(&buttons, CONF_CTL_BUTTON_L2));
 }

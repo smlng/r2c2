@@ -15,6 +15,7 @@
 extern "C" {
 #endif
 
+void check_lights(uint16_t state);
 kernel_pid_t lights_init(void);
 void lights_reset (void);
 
