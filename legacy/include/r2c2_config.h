@@ -98,9 +98,10 @@ typedef struct {
 #define CONF_LIGHTS_INTERVAL    (29*1000) // 29ms
 #define CONF_LIGHTS_HLO         GPIO_PIN(PB,03)
 //#define CONF_LIGHTS_HLO         GPIO_PIN(PB,22)
-#define CONF_LIGHTS_FLASH       (10) // x-times CONF_LIGHTS_INTERVAL
+#define CONF_LIGHTS_FLASH       (7) // x-times CONF_LIGHTS_INTERVAL
 #define CONF_LIGHTS_ILEFT       GPIO_PIN(PB,02) // left indicator
 #define CONF_LIGHTS_IRIGHT      GPIO_PIN(PB,23) // right indicator
+#define CONF_LIGHTS_ICOUNT_INIT (14)
 /** @} */
 
 /**

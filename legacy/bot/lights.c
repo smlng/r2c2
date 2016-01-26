@@ -10,6 +10,7 @@
 static int state_hli = 0; // state of inner headlights, 0=OFF, 1=ON
 static int state_hlo = 0; // state of outer headlights, 0=OFF, 1=ON
 static int state_flash = 0;
+static int count_indicator = CONF_LIGHTS_ICOUNT_INIT;
 static int state_indicator_left = 0;
 static int state_indicator_right = 0;
 
@@ -19,29 +20,20 @@ static char tlights_stack[THREAD_STACKSIZE_DEFAULT];
 void check_lights(uint16_t state)
 {
     puts("CALL check_lights");
-    if (_chk_bit(&state, CONF_CTL_BUTTON_SQUARE)) {
-        state_hlo ? (state_hlo=0) : (state_hlo=1);
-    }
-    if (_chk_bit(&state, CONF_CTL_BUTTON_CIRCLE)) {
-        state_hli ? (state_hli=0) : (state_hli=1);
-    }
+    state_hlo = _chk_bit(&state, CONF_CTL_BUTTON_SQUARE);
+    state_hli = _chk_bit(&state, CONF_CTL_BUTTON_CIRCLE);
     if (_chk_bit(&state, CONF_CTL_BUTTON_R2)) {
         state_flash = CONF_LIGHTS_FLASH;
     }
-    if (_chk_bit(&state, CONF_CTL_BUTTON_L1|CONF_CTL_BUTTON_TRIANGLE)) {
-        state_indicator_left ? (state_indicator_left=0) : (state_indicator_left=1);
-    }
-    if (_chk_bit(&state, CONF_CTL_BUTTON_R1|CONF_CTL_BUTTON_TRIANGLE)) {
-        state_indicator_right ? (state_indicator_right=0) : (state_indicator_right=1);
-    }
+    state_indicator_left  = _chk_bit(&state, CONF_CTL_BUTTON_L1|CONF_CTL_BUTTON_TRIANGLE);
+    state_indicator_right = _chk_bit(&state, CONF_CTL_BUTTON_R1|CONF_CTL_BUTTON_TRIANGLE);
 }
 
 static void _toggle_light(int *state, int light)
 {
     if (*state) {
-        if (*state < 2) {
+        if (!gpio_read(light)) {
             gpio_set(light);
-            *state = 2;
         }
     }
     else {
@@ -51,7 +43,6 @@ static void _toggle_light(int *state, int light)
 
 static void _toggle_light_pwm(int *state)
 {
-    return;
     if (*state) {
         if (*state < 2) {
             pwm_set(CONF_LIGHTS_PWM, CONF_LIGHTS_PWM_CHAN, CONF_LIGHTS_PWM_MAX);
@@ -68,6 +59,7 @@ static void *_thread_lights(void *arg)
     puts("CALL _thread_lights");
     (void)arg;
     while(1) {
+        count_indicator--;
         xtimer_usleep(CONF_LIGHTS_INTERVAL);
         if (state_flash) {
             gpio_set(CONF_LIGHTS_HLO);
@@ -79,8 +71,11 @@ static void *_thread_lights(void *arg)
             _toggle_light(&state_hlo,CONF_LIGHTS_HLO);
             _toggle_light_pwm(&state_hli);
         }
-        state_indicator_left  ? gpio_toggle(CONF_LIGHTS_ILEFT)  : gpio_clear(CONF_LIGHTS_ILEFT);
-        state_indicator_right ? gpio_toggle(CONF_LIGHTS_IRIGHT) : gpio_clear(CONF_LIGHTS_IRIGHT);
+        if (!count_indicator) {
+            count_indicator = CONF_LIGHTS_ICOUNT_INIT;
+            state_indicator_left  ? gpio_toggle(CONF_LIGHTS_ILEFT)  : gpio_clear(CONF_LIGHTS_ILEFT);
+            state_indicator_right ? gpio_toggle(CONF_LIGHTS_IRIGHT) : gpio_clear(CONF_LIGHTS_IRIGHT);
+        }
     }
     return NULL;
 }

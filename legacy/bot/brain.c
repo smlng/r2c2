@@ -50,7 +50,7 @@ static kernel_pid_t lights_pid = -1;
 static void _horn(int state)
 {
     if (state)
-        pwm_set(CONF_HORN_PWM, CONF_HORN_PWM_CHAN, 255);
+        pwm_set(CONF_HORN_PWM, CONF_HORN_PWM_CHAN, 100);
     else
         pwm_set(CONF_HORN_PWM, CONF_HORN_PWM_CHAN, 0);
 }
