@@ -1,4 +1,9 @@
 #!/bin/bash
+if [[ $EUID -ne 0 ]]; then
+  echo "You must be a root user" 2>&1
+  exit 1
+fi
+
 [ -z "$1" ] && {
   echo "Missing PAN ID!"
   echo "USAGE: $0 <PAN ID> <CHANNEL>"
