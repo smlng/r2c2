@@ -1,7 +1,6 @@
 [Unit]
 Description=R2C2 controller
-After=network.target
-After=lowpan.service
+After=network.target network-online.target lowpan.service
 
 [Service]
 EnvironmentFile=/etc/default/r2c2

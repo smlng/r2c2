@@ -4,9 +4,11 @@ After=network.target
 
 [Service]
 EnvironmentFile=/etc/default/lowpan
-Type=simple
+Type=oneshot
 User=root
 ExecStart=/usr/local/sbin/create_lowpan.sh $PAN $CHN
+ExecStop=/usr/local/sbin/delete_lowpan.sh
+RemainAfterExit=yes
 
 [Install]
 WantedBy=multi-user.target
