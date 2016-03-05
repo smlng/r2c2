@@ -20,11 +20,13 @@ def ctl_init(dev):
     print "Found gamepad with %d buttons and %d axis\n" % [num_btns, num_axis]
 
 def main():
-    parser = argparse.ArgumentParser(description='', epilog='')
-    parser.add_argument('-d', '--device', help='Input device',
-                        type=str, required=True)
-    args = vars(parser.parse_args())
-    ctl_init(args['device'])
+    #parser = argparse.ArgumentParser(description='', epilog='')
+    #parser.add_argument('-d', '--device', help='Input device',
+    #                    type=str, required=True)
+    #args = vars(parser.parse_args())
+    #gamepad_dev = args['device']
+    gamepad_dev = '/dev/bus/usb/001/003'
+    ctl_init(gamepad_dev)
 
 if __name__ == "__main__":
     main()
