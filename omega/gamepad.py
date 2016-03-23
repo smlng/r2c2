@@ -11,7 +11,7 @@ def ctl_init(dev):
     while not ready:
         buf = pipe.read(8)
         actions = "["
-        actions += ' '.join(['%02X' % ord(c)] for c in buf)
+        actions += ' '.join('%02X' % ord(c) for c in buf)
         actions += "]"
         print actions
         if ord(buf[6]) == 0x81:
