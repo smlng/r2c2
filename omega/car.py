@@ -1,11 +1,10 @@
 #!/usr/bin/env python
-import argparse
-import logging
 import socket
 import subprocess
 import sys
 
 R2C2_COMM_MSGCTL = 0xEE
+R2C2_COMM_ADDR = ''
 R2C2_COMM_PORT = 2409
 R2C2_COMM_BUFSIZE = 64
 
@@ -76,25 +75,7 @@ def brain_loop(lhost, lport):
 
 def main():
     """The main loop"""
-    parser = argparse.ArgumentParser(description='', epilog='')
-    parser.add_argument('-l', '--loglevel',
-                        help='Set loglevel [DEBUG,INFO,WARNING,ERROR,CRITICAL].',
-                        type=str, default='WARNING')
-    parser.add_argument('-a', '--addr',
-                        help='Listen address (Default: localhost).',
-                        type=str, default='')
-    parser.add_argument('-p', '--port',
-                        help='Listen port (Default: '+str(R2C2_COMM_PORT)+').',
-                        type=int, default=R2C2_COMM_PORT)
-    args = vars(parser.parse_args())
-
-    numeric_level = getattr(logging, args['loglevel'].upper(), None)
-    if not isinstance(numeric_level, int):
-        raise ValueError('Invalid log level: %s' % loglevel)
-    logging.basicConfig(level=numeric_level,
-                        format='%(asctime)s : %(levelname)s : %(message)s')
-
-    brain_loop(args['addr'], args['port'])
+    brain_loop(R2C2_COMM_ADDR, R2C2_COMM_PORT)
 
 if __name__ == "__main__":
     main()
