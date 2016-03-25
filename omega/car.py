@@ -68,8 +68,10 @@ def brain_loop(lhost, lport):
     bsock = _brain_init_sock(lhost, lport)
     while True:
         data, addr = bsock.recvfrom(R2C2_COMM_BUFSIZE)
+        print "> received message from " + addr + "\n"
         mtype, speed, steer, buttons = unpack('HIII', data)
         if mtype == R2C2_COMM_MSGCTL:
+            print ">> content: %d %d %d %d \n" % (mtype, speed, steer, buttons)
             _brain_set_speed(speed)
             _brain_set_steer(steer)
 
