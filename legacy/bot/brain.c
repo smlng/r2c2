@@ -25,7 +25,6 @@
 #include <unistd.h>
 // riot
 #include "board.h"
-#include "kernel.h"
 #include "net/gnrc/netapi.h"
 #include "net/gnrc/netif.h"
 #include "periph/gpio.h"
@@ -50,7 +49,7 @@ static kernel_pid_t lights_pid = -1;
 static void _horn(int state)
 {
     if (state)
-        pwm_set(CONF_HORN_PWM, CONF_HORN_PWM_CHAN, 100);
+        pwm_set(CONF_HORN_PWM, CONF_HORN_PWM_CHAN, CONF_HORN_PWM_MAX);
     else
         pwm_set(CONF_HORN_PWM, CONF_HORN_PWM_CHAN, 0);
 }
@@ -150,8 +149,8 @@ void brain_init(void)
 {
     /* initialize steering control */
     puts("+ init steering");
-    gpio_init(CONF_STEERING_DIRA, GPIO_DIR_OUT, GPIO_NOPULL);
-    gpio_init(CONF_STEERING_DIRB, GPIO_DIR_OUT, GPIO_NOPULL);
+    gpio_init(CONF_STEERING_DIRA, GPIO_OUT);
+    gpio_init(CONF_STEERING_DIRB, GPIO_OUT);
     if (pwm_init(CONF_STEERING_PWM, CONF_STEERING_PWM_CHAN,
                  CONF_STEERING_FREQ, CONF_STEERING_RES) < 0) {
         puts("ERROR brain_init: init steering PWM\n");
@@ -161,8 +160,8 @@ void brain_init(void)
 
     /* initialize ENGINE control */
     puts("+ init engine");
-    gpio_init(CONF_ENGINE_DIRA, GPIO_DIR_OUT, GPIO_NOPULL);
-    gpio_init(CONF_ENGINE_DIRB, GPIO_DIR_OUT, GPIO_NOPULL);
+    gpio_init(CONF_ENGINE_DIRA, GPIO_OUT);
+    gpio_init(CONF_ENGINE_DIRB, GPIO_OUT);
     if (pwm_init(CONF_ENGINE_PWM, CONF_ENGINE_PWM_CHAN,
                  CONF_ENGINE_FREQ, CONF_ENGINE_RES) < 0) {
         puts("ERROR brain_init: init engine PWM\n");

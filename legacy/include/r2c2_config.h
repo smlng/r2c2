@@ -76,9 +76,10 @@ typedef struct {
  * @{
  */
 #define CONF_HORN_PWM           (PWM_1)
-#define CONF_HORN_PWM_CHAN      (0U)
+#define CONF_HORN_PWM_CHAN      (1U)
 #define CONF_HORN_FREQ          (500)
-#define CONF_HORN_RES           (255)    /* results in ~10MHz timer freq */
+#define CONF_HORN_RES           (255)
+#define CONF_HORN_PWM_MAX       ((unsigned int)200)
 
 #define CONF_DISTANCE_ECHO      GPIO_PIN(PA,14)
 #define CONF_DISTANCE_TRIG      GPIO_PIN(PB,22)
@@ -88,11 +89,11 @@ typedef struct {
  * @brief   Configure LIGHTS
  * @{
  */
- #define CONF_LIGHTS_PWM         (PWM_1)
- #define CONF_LIGHTS_PWM_CHAN    (1U)
- #define CONF_LIGHTS_FREQ        (500)
- #define CONF_LIGHTS_RES         (255)    /* results in ~10MHz timer freq */
- #define CONF_LIGHTS_PWM_MAX     ((unsigned int)100)
+#define CONF_LIGHTS_PWM         (PWM_1)
+#define CONF_LIGHTS_PWM_CHAN    (0U)
+#define CONF_LIGHTS_FREQ        (500)
+#define CONF_LIGHTS_RES         (255)    /* results in ~10MHz timer freq */
+#define CONF_LIGHTS_PWM_MAX     ((unsigned int)255)
 
 #define CONF_LIGHTS_PRIO        (THREAD_PRIORITY_MAIN - 2)
 #define CONF_LIGHTS_INTERVAL    (29*1000) // 29ms

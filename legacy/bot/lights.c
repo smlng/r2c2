@@ -84,9 +84,9 @@ static void *_thread_lights(void *arg)
 kernel_pid_t lights_init(void)
 {
     puts("CALL lights_init");
-    gpio_init(CONF_LIGHTS_HLO,    GPIO_DIR_OUT, GPIO_NOPULL);
-    gpio_init(CONF_LIGHTS_ILEFT,  GPIO_DIR_OUT, GPIO_NOPULL);
-    gpio_init(CONF_LIGHTS_IRIGHT, GPIO_DIR_OUT, GPIO_NOPULL);
+    gpio_init(CONF_LIGHTS_HLO,    GPIO_OUT);
+    gpio_init(CONF_LIGHTS_ILEFT,  GPIO_OUT);
+    gpio_init(CONF_LIGHTS_IRIGHT, GPIO_OUT);
     //gpio_init(CONF_LIGHTS_HLO, GPIO_DIR_OUT, GPIO_NOPULL);
     if (pwm_init(CONF_LIGHTS_PWM, CONF_LIGHTS_PWM_CHAN,
                  CONF_LIGHTS_FREQ, CONF_LIGHTS_RES) < 0) {

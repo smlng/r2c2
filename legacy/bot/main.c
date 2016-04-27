@@ -106,7 +106,7 @@ static const shell_command_t _commands[] = {
 
 int main(void)
 {
-    LED_RED_OFF;
+    LED0_OFF;
 
     /* define buffer to be used by the shell */
     char line_buf[SHELL_DEFAULT_BUFSIZE];
